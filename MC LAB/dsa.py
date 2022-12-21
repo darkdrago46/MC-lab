@@ -1,0 +1,20 @@
+from Crypto.PublicKey import DSA
+from Crypto.Hash import SHA256
+from Crypto.Signature import DSS
+
+KEYSIZE = 1024
+message ="Manoj". encode()
+key = DSA.generate(KEYSIZE)
+publickey = key.publickey()
+print (publickey.exportKey())
+message_hash = SHA256.new(message)
+signer = DSS.new (key, 'fips-186-3')
+signature = signer.sign (message_hash)
+print(int.from_bytes(signature,'big',signed=False))  #last 2 arguments
+verifier = DSS.new(publickey, 'fips-186-3')
+
+try:
+    verifier.verify(message_hash, signature)
+    print("Verification successful")
+except ValueError:  #forgot valueerror
+    print("Verification failed")
